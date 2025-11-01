@@ -1,12 +1,12 @@
 const CACHE_NAME = 'music-widget-cache-v1';
 
 const urlsToCache = [
-    './',
+  './',
   './index.html',
   './style.css',
   './renderer_clean.js',
   './manifest.json',
-  './assets/clairo(2).mp3',
+  './assets/clairo_2.mp3',
   './assets/anything.mp3',
   './assets/gluesnoopy.jpg',
   './assets/snoopicon.png',
@@ -33,4 +33,5 @@ self.addEventListener('fetch', event => {
         })
     );
 })
+
 
