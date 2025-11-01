@@ -5,7 +5,7 @@ const THEMES = [
     name: 'Snoopy x Glue (Night)',
     title: 'GLUE SONG',
     artist: 'Clairo & Bea',
-    audioSrc: './assets/clairo_2.mp3', // Path fix confirmed
+    audioSrc: './assets/clairo_2.mp3', // Confirmed correct path
     vinylImage: './assets/gluesnoopy.jpg',
     background: '',
     bodyClass: 'starlight-background',
