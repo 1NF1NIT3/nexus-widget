@@ -1,4 +1,5 @@
-const CACHE_NAME = 'music-widget-cache-v1';
+// FIX: Incremented cache version to force users to download the new clairo_2.mp3 path
+const CACHE_NAME = 'music-widget-cache-v2';
 
 const urlsToCache = [
   './',
@@ -6,6 +7,7 @@ const urlsToCache = [
   './style.css',
   './renderer_clean.js',
   './manifest.json',
+  // FIX: Path must be updated here
   './assets/clairo_2.mp3',
   './assets/anything.mp3',
   './assets/gluesnoopy.jpg',
@@ -20,6 +22,7 @@ self.addEventListener('install', (event) => {
     event.waitUntil(
         caches.open(CACHE_NAME)
             .then(cache => {
+                // FIX: Must use cache.addAll, not console.addAll
                 return cache.addAll(urlsToCache);
             })
     );
@@ -33,5 +36,3 @@ self.addEventListener('fetch', event => {
         })
     );
 })
-
-
