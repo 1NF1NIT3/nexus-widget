@@ -1,0 +1,373 @@
+:root {
+  --widget-bg: #0f172a; /* slate-900 */
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background:transparent; 
+  border-radius: 18px;
+}
+
+#widget {
+  -webkit-app-region: drag;
+  position: relative;
+  /* UI Overhaul: Rounded corners for the main widget */
+  border-radius: 18px; 
+  
+}
+
+.close-btn {
+  -webkit-app-region: no-drag;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  /* UI Overhaul: Increased size for better tap target */
+  width: 30px; 
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: #a0aec0; /* Lighter gray for icon */
+}
+
+.close-btn:hover {
+  opacity: 0.8;
+  transform: scale(1.1);
+  color: #fff; /* White on hover */
+}
+
+
+/* Elements that should NOT act as drag handles (buttons/interactive UI) */
+.no-drag {
+  -webkit-app-region: no-drag;
+}
+
+/* Corner GIF element */
+.corner-gif {
+  position: absolute;
+  bottom: 25px; /* Adjusted position */
+  right: -5px; /* Adjusted position */
+  width: 50px;  /* Slightly larger */
+  height: 50px; /* Slightly larger */
+  pointer-events: none;
+  z-index: 10;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 1;
+  filter: brightness(1.05) contrast(1.05);
+  /* UI Overhaul: Blends better with rounded widget */
+  border-radius: 12px; 
+  animation: goldGlow 2s ease-in-out infinite alternate;
+}
+
+.vinyl-wrap {
+  width: 170px;
+  height: 170px;
+  /* UI Overhaul: Smoother, more pronounced shadow */
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.7); 
+  position: relative;
+  overflow: visible;
+  z-index: 20;
+  /* UI Overhaul: Transition for dynamic frame changes */
+  transition: all 0.3s ease-in-out; 
+}
+
+/* Realistic vinyl disc built with CSS: dark body, subtle highlight and concentric grooves */
+/* Redesigned Vinyl Disc: Highly Detailed Grooves and Sheen */
+.vinyl-disc {
+width: 150px;
+height: 150px;
+border-radius: 50%;
+position: relative;overflow: hidden;
+box-shadow: inset 0 3px 15px rgba(0,0,0,0.7), 0 5px 15px rgba(0,0,0,0.5); 
+background-color: #111111; /* Very dark gray base (the record material) */
+background-size: cover; 
+background-position: center; 
+background-repeat: no-repeat;
+background-image: 
+    /* 1. Deep, complex repeating groove pattern */
+    repeating-radial-gradient(
+      circle at 50% 50%, 
+      rgba(0, 0, 0, 0.4) 0, rgba(0, 0, 0, 0.4) 0.5px, /* Dark line */
+      rgba(255, 255, 255, 0.05) 0.5px, transparent 1.5px /* Light space/reflection */
+    ),
+/* 2. Subtle, large reflection for plastic sheen */
+radial-gradient(circle at 120% 120%, rgba(255,255,255,0.15) 0%, transparent 40%),
+/* 3. Reflection from top-left */
+radial-gradient(circle at 10% 10%, rgba(255,255,255,0.08) 0%, transparent 20%);
+
+
+/* Blend mode is crucial: Multiplies the image with the grooves/sheen */
+background-blend-mode: multiply, overlay, overlay; 
+transition: transform 0.3s linear, box-shadow 0.3s ease-in-out; 
+}
+.vinyl-disc.spin { animation: spin-anim 2s linear infinite; }
+
+.vinyl-center-label {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #fff9f1, #f4c95a 40%, #d97706 60%);
+  /* UI Overhaul: Softer shadow */
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.6), 0 1px 4px rgba(0,0,0,0.3); 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  color: #111827;
+  font-weight: 700;
+}
+
+@keyframes spin-anim {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.spin {
+  animation: spin-anim 2s linear infinite;
+}
+
+@keyframes glow {
+  from {
+    filter: brightness(1.2) contrast(1.1) drop-shadow(0 0 4px rgba(255, 255, 255, 0.3));
+  }
+  to {
+    filter: brightness(1.4) contrast(1.2) drop-shadow(0 0 8px rgba(255, 255, 255, 0.5));
+  }
+}
+
+/* Golden glow animation for corner GIF */
+@keyframes goldGlow {
+  from {
+    filter: brightness(1.05) drop-shadow(0 0 6px rgba(255, 199, 44, 0.45));
+  }
+  to {
+    filter: brightness(1.12) drop-shadow(0 0 12px rgba(255, 199, 44, 0.85));
+  }
+}
+
+.theme-menu {
+  position: absolute;
+  top: 38px;
+  right: 8px;
+  /* UI Overhaul: Slightly darker background, more rounded */
+  background: #080d1a; 
+  border: 1px solid rgba(255,255,255,0.06); 
+  border-radius: 8px; 
+  min-width: 130px; /* Slightly wider */
+  /* UI Overhaul: Softer, more diffused shadow */
+  box-shadow: 0 6px 20px rgba(0,0,0,0.5); 
+  z-index: 1000;
+  overflow: hidden;
+}
+
+.theme-item {
+  padding: 10px 12px; /* Increased padding */
+  font-size: 13px; /* Slightly larger text */
+  color: #e2e8f0; /* Lighter text color */
+  transition: background 0.15s ease-out;
+}
+
+.theme-item:hover { 
+  background: rgba(255,255,255,0.08); /* More noticeable hover */
+  color: #fff; /* White text on hover */
+}
+
+.hidden { display: none; }
+
+/* Position the vinyl partially outside the left edge */
+.vinyl-outside {
+  position: absolute;
+  left: -85px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+/* ensure the theme menu never forces the window to scroll; keep it compact */
+.theme-menu {
+  max-height: 120px;
+  overflow-y: auto; 
+}
+
+/* ---------------------------------------------------------------------- */
+/* --- CSS for the 'Anything' Theme Background Effect --- */
+/* ---------------------------------------------------------------------- */
+
+.anything-background-effect {
+  background-color: #FDFDFD;
+  background-image:
+    radial-gradient(circle 12px at 10% 10%, #FFB6C1 0%, #FFB6C1 100%, transparent 100%),
+    radial-gradient(circle 10px at 90% 15%, #FFB6C1 0%, #FFB6C1 100%, transparent 100%),
+    radial-gradient(circle 14px at 15% 50%, #FFB6C1 0%, #FFB6C1 100%, transparent 100%),
+    radial-gradient(circle 10px at 85% 60%, #FFB6C1 0%, #FFB6C1 100%, transparent 100%),
+    radial-gradient(circle 12px at 30% 85%, #FFB6C1 0%, #FFB6C1 100%, transparent 100%),
+    radial-gradient(circle 10px at 70% 80%, #FFB6C1 0%, #FFB6C1 100%, transparent 100%),
+    radial-gradient(circle 8px at 45% 35%, #FFB6C1 0%, #FFB6C1 100%, transparent 100%),
+    radial-gradient(circle 10px at 60% 45%, #FFB6C1 0%, #FFB6C1 100%, transparent 100%);
+
+  background-position: 10% 10%, 90% 15%, 15% 50%, 85% 60%, 30% 85%, 70% 80%, 45% 35%, 60% 45%;
+  background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+/* Add yellow glow to corner GIF for 'anything' theme */
+.anything-background-effect #cornerGif {
+  filter: drop-shadow(0 0 10px rgba(255, 199, 44, 0.6)); /* Charlie Brown Yellow glow */
+}
+
+/* Make the theme button higher-contrast and accessible */
+.theme-btn {
+  -webkit-app-region: no-drag;
+  background: linear-gradient(180deg, #ffd166 0%, #f59e0b 100%);
+  color: #111827;
+  border: none;
+  padding: 8px 12px; /* Increased padding */
+  font-weight: 700;
+  border-radius: 8px; /* Slightly more rounded */
+  /* UI Overhaul: Enhanced shadow and transition for clean animation */
+  box-shadow: 0 4px 15px rgba(0,0,0,0.35); 
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.theme-btn:hover { 
+  filter: brightness(1.05); 
+  box-shadow: 0 6px 20px rgba(0,0,0,0.45);
+  transform: translateY(-3px) scale(1.02);
+}
+
+.ios-button-base {
+    transition: all 0.2s ease-out;
+    border-radius: 12px !important; /* Slightly more rounded than standard */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.ios-button-base:hover {
+    filter: brightness(1.1);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+    transform: translateY(-1px);
+}
+
+/* Small heart icon used by the Snoopy x Glue Song theme */
+.heart-icon {
+  font-size: 14px; /* Slightly larger */
+  line-height: 1;
+  color: #FFB6C1; 
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px; /* Slightly larger */
+  height: 20px; /* Slightly larger */
+  border-radius: 50%;
+  background: transparent;
+  box-shadow: none;
+}
+
+/* Optional helper class for a 'doghouse' framed vinyl - applied inline by JS when theme requests it */
+/* This class is now primarily for adding visual styling if a frame is desired, not the direct border */
+.vinyl-doghouse-frame {
+  /* This class can still be used for additional styling if needed, but border is now set via JS theme.vinylFrame */
+}
+
+/* ---------------------------------------------------------------------- */
+/* --- CSS for the 'Starlight' Theme Background (Brighter, More Dense, and MOON) --- */
+/* ---------------------------------------------------------------------- */
+.starlight-background {
+  background-color: #1D2B4D; 
+  background-image:
+    radial-gradient(circle at 10% 20%, #F0F8FF99 1px, transparent 1px), 
+    radial-gradient(circle at 50% 70%, #F0F8FF99 1px, transparent 1px), 
+    radial-gradient(circle at 80% 40%, #F0F8FF99 1px, transparent 1px), 
+    radial-gradient(circle at 35% 10%, #F0F8FF77 1px, transparent 1px), 
+    radial-gradient(circle at 75% 90%, #F0F8FF77 1px, transparent 1px), 
+    radial-gradient(circle at 20% 50%, #E8C67B66 1.5px, transparent 1.5px), 
+    radial-gradient(circle at 90% 60%, #E8C67B66 1.5px, transparent 1.5px),
+    radial-gradient(circle at 5% 85%, #C49E9E66 1.5px, transparent 1.5px), 
+    radial-gradient(circle at 65% 5%, #C49E9E66 1.5px, transparent 1.5px),
+    radial-gradient(circle at 25% 45%, #F0F8FF99 1px, transparent 1px),
+    radial-gradient(circle at 60% 15%, #F0F8FF99 1px, transparent 1px),
+    radial-gradient(circle at 15% 75%, #F0F8FF77 1px, transparent 1px),
+    radial-gradient(circle at 70% 30%, #E8C67B66 1.5px, transparent 1.5px);
+  
+  background-repeat: repeat; 
+  background-size: 150px 150px; 
+  background-attachment: fixed;
+  position: relative; /* Needed for ::before pseudo-element */
+  overflow: hidden; /* Ensures moon doesn't overflow */
+}
+
+/* MOON for Starlight Background */
+.starlight-background::before {
+  content: '';
+  position: absolute;
+  top: 10%; /* Positioning */
+  left: 5%; /* Positioning */
+  width: 100px; /* Size of the moon */
+  height: 100px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.5) 50%, rgba(255, 255, 255, 0.2) 80%, transparent 100%);
+  box-shadow: 0 0 30px 10px rgba(255, 255, 255, 0.2); /* Soft glow */
+  z-index: 1; /* Behind stars but visible */
+  animation: float-anim 10s ease-in-out infinite alternate; /* Gentle float animation */
+}
+
+/* Moon floating animation */
+@keyframes float-anim {
+  0% { transform: translate(0, 0) scale(1); opacity: 0.9; }
+  50% { transform: translate(10px, -10px) scale(1.02); opacity: 1; }
+  100% { transform: translate(0, 0) scale(1); opacity: 0.9; }
+}
+
+/* General UI Element Styling */
+.title {
+  font-size: 1.25rem; /* Larger title */
+  font-weight: 700;
+  color: var(--theme-text, #f0f8ff);
+  transition: color 0.3s ease-in-out;
+}
+
+.artist {
+  font-size: 0.9rem; /* Slightly larger artist name */
+  font-weight: 400;
+  color: var(--theme-text, #a0aec0);
+  transition: color 0.3s ease-in-out;
+}
+
+/* Play/Pause Buttons */
+.playback-controls button {
+  background: var(--theme-action, #f59e0b);
+  color: var(--theme-text, #111827);
+  border-radius: 8px;
+  padding: 10px 18px; /* More padding */
+  font-size: 1rem;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  transition: all 0.2s ease-in-out;
+}
+
+.playback-controls button:hover {
+  filter: brightness(1.05);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.45);
+  transform: translateY(-1px);
+}
+
+.playback-controls button#pauseBtn {
+  background: var(--theme-secondary-bg, #9e2a2a);
+  color: var(--theme-text, #f0f8ff);
+}

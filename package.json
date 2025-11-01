@@ -1,0 +1,16 @@
+{
+  "name": "music-widget",
+  "version": "0.1.0",
+  "description": "Minimal frameless music widget built with Electron",
+  "main": "main_fix.js",
+  "scripts": {
+    "start": "electron . --disable-gpu --no-sandbox"
+   
+  },
+  "keywords": ["electron", "widget", "music"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^30.0.0"
+  }
+}
