@@ -8,12 +8,12 @@
     "theme_color": "#E8C67B",
     "icons": [
         {
-            "src": "snoopicon.png",
+            "src": "./assets/snoopicon.png",
             "sizes": "192x192",
             "type": "image/png"
         },
         {
-            "src": "snoopicon.png",
+            "src": "./assets/snoopicon.png",
             "sizes": "512x512",
             "type": "image/png"
         }
@@ -21,4 +21,5 @@
 
 
 }
+
 
