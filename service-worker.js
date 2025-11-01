@@ -7,8 +7,8 @@ const urlsToCache = [
   './style.css',
   './renderer_clean.js',
   './manifest.json',
-  // FIX: Path must be updated here
-  './assets/clairo_2.mp3',
+  // Ensure we only have the correct audio path
+  './assets/clairo_2.mp3', 
   './assets/anything.mp3',
   './assets/gluesnoopy.jpg',
   './assets/snoopicon.png',
@@ -22,8 +22,8 @@ self.addEventListener('install', (event) => {
     event.waitUntil(
         caches.open(CACHE_NAME)
             .then(cache => {
-                // FIX: Must use cache.addAll, not console.addAll
-                return cache.addAll(urlsToCache);
+                // FIX: Ensure correct method for adding to cache
+                return cache.addAll(urlsToCache); 
             })
     );
 });
@@ -32,7 +32,7 @@ self.addEventListener('fetch', event => {
     event.respondWith(
         caches.match(event.request)
         .then(response => {
-                return response || fetch(event.request); // Return cached resource
+                return response || fetch(event.request); 
         })
     );
 })
