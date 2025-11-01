@@ -1,18 +1,3 @@
-// NEW SECURE IMPORTS (Only available in the preload script when contextIsolation is true)
-const { contextBridge, ipcRenderer } = require('electron');
-
-// ====================================================================
-// CONTEXT BRIDGE SETUP: Expose IPC methods securely to the renderer
-// ====================================================================
-
-contextBridge.exposeInMainWorld('electronAPI', {
-    // IPC methods removed as close/minimize buttons are gone
-});
-    // You can add more API calls here as needed
-
-// ====================================================================
-// RENDERER LOGIC (The rest of your original code, UNMODIFIED)
-// ====================================================================
 
 // Renderer: single clean script that manages themes, audio, and UI
 const THEMES = [
@@ -295,4 +280,5 @@ document.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('click', () => { themeMenu.classList.add('hidden'); });
 
 });
+
 
