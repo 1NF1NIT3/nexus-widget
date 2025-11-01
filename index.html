@@ -1,64 +1,69 @@
 <!doctype html>
+<!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Music Widget</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="style.css">
-    <link rel="manifest" href="manifest.json" />
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Music Widget</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json" />
 
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('./service-worker.js')
-          .then(registration => {
-            console.log('SW registerd:', registration);
-          })
-          .catch(error => {
-            console.error("SW registration failed:", error);
-          });
-        });
-      }
-    </script>
-  </head>
-  <body class="bg-gray-900 text-white font-sans">
-      <div id="widget" class="w-[350px] h-[180px] p-2 flex items-center relative overflow-visible bg-transparent">
-            <div id="vinylWrap" class="vinyl-wrap vinyl-outside">
-        <div id="vinyl" class="vinyl-disc" aria-hidden="true">
-          <div id="vinylLabel" class="vinyl-center-label">Label</div>
-        </div>
-      </div>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('./service-worker.js')
+          .then(registration => {
+            console.log('SW registerd:', registration);
+          })
+          .catch(error => {
+            console.error("SW registration failed:", error);
+          });
+        });
+      }
+    </script>
+  </head>
+  <body class="bg-gray-900 text-white font-sans">
+   <div id="widget" class="w-[350px] h-[180px] p-2 flex items-center relative overflow-visible bg-transparent">
+      <!-- Left: vinyl (partially outside) - now a CSS-styled realistic vinyl disc -->
+      <div id="vinylWrap" class="vinyl-wrap vinyl-outside">
+        <div id="vinyl" class="vinyl-disc" aria-hidden="true">
+          <div id="vinylLabel" class="vinyl-center-label">Label</div>
+        </div>
+      </div>
 
-      <div class="flex-1 h-full flex flex-col justify-between pl-16 pr-2 py-3 relative">
-        
-                <div class="absolute top-3 right-2">
-          <button id="themeBtn" class="theme-btn text-xs text-gray-300 px-2 py-1 bg-gray-800 rounded no-drag">Theme</button>
-        </div>
+      <!-- Right: content -->
+<div class="flex-1 h-full flex flex-col justify-center pl-16 pr-2">
+        <div id="drag" class="w-full flex justify-between items-center mb-1">
+          <div class="drag-handle text-sm text-gray-300 px-2 py-1"></div>
+          <div class="flex items-center gap-2">
+            <button id="themeBtn" class="theme-btn text-xs text-gray-300 px-2 py-1 bg-gray-800 rounded no-drag">Theme</button>
+            
+          </div>
+        </div>
 
-                <div class="flex items-center justify-between">
-          <div class="flex-1 text-center">
-            <div class="flex items-center justify-center gap-2">
-              <div id="title" class="text-lg font-semibold">Title</div>
-              <div id="heartIcon" class="heart-icon" aria-hidden="true">♥</div>
-            </div>
-            <div id="artist" class="text-xs text-gray-400">Artist</div>
-          </div>
+        <div class="flex items-center justify-between">
+          <div class="flex-1 text-center">
+            <div class="flex items-center justify-center gap-2">
+              <div id="title" class="text-lg font-semibold">Title</div>
+              <div id="heartIcon" class="heart-icon" aria-hidden="true">♥</div>
+            </div>
+            <div id="artist" class="text-xs text-gray-400">Artist</div>
+          </div>
 
-          <div class="flex items-center gap-2 no-drag">
-            <button id="playBtn" class="px-3 py-1 rounded bg-indigo-600 hover:bg-indigo-500 text-sm">Play</button>
-            <button id="pauseBtn" class="px-3 py-1 rounded bg-gray-700 hover:bg-gray-600 text-sm">Pause</button>
-          </div>
-        </div>
-      </div>
+          <div class="flex items-center gap-2 no-drag">
+            <button id="playBtn" class="px-3 py-1 rounded bg-indigo-600 hover:bg-indigo-500 text-sm">Play</button>
+            <button id="pauseBtn" class="px-3 py-1 rounded bg-gray-700 hover:bg-gray-600 text-sm">Pause</button>
+          </div>
+        </div>
+      </div>
 
-      <div id="themeMenu" class="theme-menu hidden"></div>
-  <div id="cornerGif" class="corner-gif" aria-hidden="true"></div>
-      <audio id="audio" preload="auto"></audio>
-      
-    </div>
+      <div id="themeMenu" class="theme-menu hidden"></div>
+  <div id="cornerGif" class="corner-gif" aria-hidden="true"></div>
+      <audio id="audio" preload="auto"></audio>
 
-    <script src="./renderer_clean.js"></script>
-  </body>
+   <script src="./renderer_clean.js"></script>
+    </div>
+  </body>
 </html>
