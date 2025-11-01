@@ -6,11 +6,10 @@ const urlsToCache = [
   './style.css',
   './renderer_clean.js',
   './manifest.json',
-  './assets/icon-192.png',
-  './assets/icon-512.png',
-  './assets/clairo (2).mp3',
+  './assets/clairo(2).mp3',
   './assets/anything.mp3',
   './assets/gluesnoopy.jpg',
+  './assets/snoopicon.png',
   './assets/snoopy.jpg',
   './assets/sleep.gif',
   './assets/snoopygif.gif',
@@ -21,7 +20,7 @@ self.addEventListener('install', (event) => {
     event.waitUntil(
         caches.open(CACHE_NAME)
             .then(cache => {
-                return console.addAll(urlsToCache);
+                return cache.addAll(urlsToCache);
             })
     );
 });
@@ -34,3 +33,4 @@ self.addEventListener('fetch', event => {
         })
     );
 })
+
