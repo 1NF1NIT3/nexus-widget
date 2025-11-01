@@ -1,4 +1,3 @@
-
 // Renderer: single clean script that manages themes, audio, and UI
 const THEMES = [
   {
@@ -6,7 +5,7 @@ const THEMES = [
     name: 'Snoopy x Glue (Night)',
     title: 'GLUE SONG',
     artist: 'Clairo & Bea',
-    audioSrc: './assets/clairo_2.mp3',
+    audioSrc: './assets/clairo_2.mp3', // Path fix confirmed
     vinylImage: './assets/gluesnoopy.jpg',
     background: '',
     bodyClass: 'starlight-background',
@@ -19,233 +18,140 @@ const THEMES = [
       primaryBg: '#1D2B4D',      
       secondaryBg: '#9E2A2A',    
       action: '#E8C67B',         
-      text: '#F0F8FF',           
-      accent: '#C49E9E'          
-    },
-    vinylFrame: {
-      color: '#F0F8FF',
-      style: 'solid', 
-      width: '2px',
-      radius: '9999px'
+      text: '#f0f8ff',          
+      textMuted: '#a0aec0'      
     }
   },
   {
     id: 'anything',
-    name: 'Anything',
-    title: 'Anything',
+    name: 'Anything (Day)',
+    title: 'ANYTHING',
     artist: 'Adrianne Lenker',
     audioSrc: './assets/anything.mp3',
     vinylImage: './assets/snoopy.jpg',
-    background: '', 
-    fontFamily: 'Comic Neue, system-ui, sans-serif',
-    fontUrl: 'https://fonts.googleapis.com/css2?family=Comic+Neue:wght@300;400;700&display=swap',
+    background: '',
+    bodyClass: 'daylight-background',
+    fontFamily: 'Playfair Display, serif',
+    fontUrl: 'https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap',
     cornerGif: './assets/snoopygif.gif',
-    bodyClass: 'anything-background-effect', 
-    labelText: 'SN',
-    labelColor: 'linear-gradient(180deg,#fff9f1,#f59e0b)',
+    labelText: 'A',
+    labelColor: '#4CAF50',
     colors: {
-      primaryBg: '#FDFDFD',
-      secondaryBg: '#A8C6D9',
-      action: '#E83333',
-      text: '#333333',
-      accent: '#F4C95A'
-    },
-    vinylFrame: {
-      color: '#E83333',
-      style: 'solid',
-      width: '2px',
-      radius: '9999px'
+      primaryBg: '#F5F5DC',      // Beige
+      secondaryBg: '#4CAF50',    // Green
+      action: '#FFC107',        // Amber
+      text: '#333333',          // Dark Gray
+      textMuted: '#666666'      // Medium Gray
     }
-  },
+  }
 ];
 
-let currentThemeIndex = 0;
+// === NEW: Local Storage for Theme Persistence ===
+// Load the last saved theme index, default to 0 (the first theme)
+let currentThemeIndex = parseInt(localStorage.getItem('lastThemeIndex')) || 0; 
 
-function loadFontIfNeeded(theme) {
-  if (!theme.fontUrl) return;
-  if (document.getElementById('theme-font-' + theme.id)) return;
-  const link = document.createElement('link');
-  link.rel = 'stylesheet';
-  link.href = theme.fontUrl;
-  link.id = 'theme-font-' + theme.id;
-  document.head.appendChild(link);
+// Safety check for invalid/out of bounds index
+if (currentThemeIndex >= THEMES.length || currentThemeIndex < 0) {
+    currentThemeIndex = 0;
+    localStorage.removeItem('lastThemeIndex'); 
+}
+// === END NEW ===
+
+const VINYL_WRAP_WIDTH = 130;
+let vinylRotation = 0;
+let rotationInterval;
+
+function updateVinyl(playing) {
+  const vinyl = document.getElementById('vinyl');
+  if (!vinyl) return;
+
+  if (playing) {
+    if (!rotationInterval) {
+      rotationInterval = setInterval(() => {
+        vinylRotation = (vinylRotation + 0.5) % 360;
+        vinyl.style.transform = `rotate(${vinylRotation}deg)`;
+      }, 1000 / 60); // Roughly 60 FPS
+    }
+    vinyl.classList.add('playing');
+  } else {
+    clearInterval(rotationInterval);
+    rotationInterval = null;
+    vinyl.classList.remove('playing');
+  }
 }
 
 function applyTheme(index) {
   const theme = THEMES[index];
-  const audio = document.getElementById('audio');
-  const vinylDisc = document.getElementById('vinyl');
-  const titleEl = document.getElementById('title');
-  const artistEl = document.getElementById('artist');
-  const playBtn = document.getElementById('playBtn');
-  const pauseBtn = document.getElementById('pauseBtn');
-  const themeBtn = document.getElementById('themeBtn');
-
-  if (!theme) return;
-  titleEl.textContent = theme.title;
-  artistEl.textContent = theme.artist;
-  audio.src = theme.audioSrc;
-  
-  try {
-    if (vinylDisc) {
-      if (theme.vinylImage) {
-        vinylDisc.style.backgroundImage = `url(${theme.vinylImage})`;
-        vinylDisc.style.backgroundSize = 'cover';
-        vinylDisc.style.backgroundPosition = 'center';
-      } else {
-        vinylDisc.style.backgroundImage = '';
-      }
-    }
-  } catch (err) {
-    console.warn('Failed to apply vinyl artwork', err);
-  }
-
-  try {
-    const vinylLabel = document.getElementById('vinylLabel');
-    if (vinylLabel) {
-      if (theme.labelText !== undefined) vinylLabel.textContent = theme.labelText;
-      if (theme.labelColor) {
-        vinylLabel.style.background = theme.labelColor;
-        const lc = String(theme.labelColor).toLowerCase();
-        if (lc.includes('gradient') || lc.includes('rgb')) {
-          vinylLabel.style.color = '#111827';
-        } else if (lc.startsWith('#') && lc.length >= 7) {
-          try {
-            const r = parseInt(lc.substr(1,2),16);
-            const g = parseInt(lc.substr(3,2),16);
-            const b = parseInt(lc.substr(5,2),16);
-            const lum = (0.2126*r + 0.7152*g + 0.0722*b)/255;
-            vinylLabel.style.color = (lum > 0.6) ? '#111827' : '#ffffff';
-          } catch(e) {
-            vinylLabel.style.color = '#111827';
-          }
-        } else {
-          vinylLabel.style.color = '#111827';
-        }
-      } else {
-        vinylLabel.style.background = '';
-        vinylLabel.style.color = '';
-      }
-    }
-  } catch (err) {
-    console.warn('Failed to apply vinyl label customizations', err);
-  }
-
-  // 1. CRITICAL: Clear ALL potential background properties first
-  // --- Start of FINAL FIX in applyTheme function ---
-
-// 1. CRITICAL: Clear all classes, including the initial Tailwind one.
-// We remove 'bg-gray-900' which is set in index.html 
-document.body.classList.remove('anything-background-effect', 'starlight-background', 'bg-gray-900'); 
-document.body.classList.remove('folded-visual');
-
-// 2. Clear all inline background properties
-document.body.style.background = ''; 
-document.body.style.backgroundColor = '';
-
-// 3. Apply the new theme background properties
-if (theme.background) {
-    // Theme uses an explicit inline background (e.g., gradient)
-    document.body.style.background = theme.background;
-} else if (theme.bodyClass) {
-    // Theme uses a CSS class for background/effects, like 'anything-background-effect'
-    document.body.classList.add(theme.bodyClass);
-} else if (theme.colors && theme.colors.primaryBg) {
-    // Default fallback: Set primary background color
-    document.body.style.backgroundColor = theme.colors.primaryBg;
-}
-
-// --- End of FINAL FIX in applyTheme function ---
-
-  if (theme.fontFamily) document.body.style.fontFamily = theme.fontFamily;
-  else document.body.style.fontFamily = '';
-  if (theme.fontUrl) loadFontIfNeeded(theme);
-  
+  const body = document.body;
+  const widget = document.getElementById('widget');
+  const vinylLabel = document.getElementById('vinylLabel');
+  const vinyl = document.getElementById('vinyl');
+  const title = document.getElementById('title');
+  const artist = document.getElementById('artist');
   const cornerGif = document.getElementById('cornerGif');
-  if (cornerGif && theme.cornerGif) {
-    try { cornerGif.style.backgroundImage = `url(${theme.cornerGif})`; } catch (e) { console.warn(e); }
-  } else if (cornerGif) {
-    cornerGif.style.backgroundImage = '';
+  const audio = document.getElementById('audio');
+
+  // 1. Remove old classes and apply new body background/font
+  body.className = '';
+  body.classList.add('bg-gray-900', 'text-white', 'font-sans', theme.bodyClass);
+
+  // 2. Load custom font (if specified)
+  if (theme.fontUrl) {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = theme.fontUrl;
+    document.head.appendChild(link);
+  }
+  body.style.fontFamily = theme.fontFamily;
+
+  // 3. Update Text and Media
+  if (title) title.textContent = theme.title;
+  if (artist) artist.textContent = theme.artist;
+  if (vinylLabel) {
+    vinylLabel.textContent = theme.labelText;
+    vinylLabel.style.backgroundColor = theme.labelColor;
+  }
+  if (vinyl) vinyl.style.backgroundImage = `url('${theme.vinylImage}')`;
+  if (cornerGif) cornerGif.style.backgroundImage = `url('${theme.cornerGif}')`;
+
+  // 4. Update Audio Source (CRITICAL for PWA)
+  if (audio) {
+    // Pause any currently playing audio
+    audio.pause();
+    // Update source and load
+    audio.src = theme.audioSrc;
+    // Important: preload="auto" in HTML helps, but audio.load() forces it after src change
+    audio.load(); 
   }
   
-  if (theme.colors) {
-    const root = document.documentElement;
-    root.style.setProperty('--theme-primary-bg', theme.colors.primaryBg);
-    root.style.setProperty('--theme-accent', theme.colors.accent);
-    root.style.setProperty('--theme-secondary-bg', theme.colors.secondaryBg);
-    root.style.setProperty('--theme-action', theme.colors.action);
-    root.style.setProperty('--theme-text', theme.colors.text);
+  // 5. Apply CSS variables for colors (for dynamic styling in style.css)
+  if (widget) {
+    widget.style.setProperty('--theme-primary-bg', theme.colors.primaryBg);
+    widget.style.setProperty('--theme-secondary-bg', theme.colors.secondaryBg);
+    widget.style.setProperty('--theme-action', theme.colors.action);
+    widget.style.setProperty('--theme-text', theme.colors.text);
+    widget.style.setProperty('--theme-text-muted', theme.colors.textMuted);
 
-    if (playBtn) {
-      playBtn.style.background = theme.colors.action;
-      playBtn.style.color = theme.colors.primaryBg === '#FDFDFD' ? theme.colors.text : '#fff';
-      playBtn.style.border = 'none';
-    }
-    if (pauseBtn) {
-      pauseBtn.style.background = theme.colors.secondaryBg;
-      pauseBtn.style.color = theme.colors.text;
-      pauseBtn.style.border = 'none';
-    }
-    if (themeBtn) {
-      themeBtn.style.background = theme.colors.accent;
-      themeBtn.style.color = theme.colors.text;
-    }
-
-    if (titleEl) titleEl.style.color = theme.colors.text;
-    if (artistEl) artistEl.style.color = theme.colors.text;
-    const heartEl = document.getElementById('heartIcon');
-    if (heartEl) {
-      if (theme.colors && theme.colors.action) heartEl.style.color = theme.colors.action;
-      else heartEl.style.color = '';
-    }
-
-    const vinylWrap = document.getElementById('vinylWrap');
-    if (vinylWrap) {
-      if (theme.vinylFrame) {
-        const vf = theme.vinylFrame;
-        try {
-          vinylWrap.style.border = `${vf.width || '2px'} ${vf.style || 'solid'} ${vf.color || '#6E5A48'}`;
-          vinylWrap.style.borderRadius = vf.radius || '12px';
-        } catch (e) { console.warn('Failed to apply vinylFrame', e); }
-      } else {
-        vinylWrap.style.border = '';
-        vinylWrap.style.borderRadius = '9999px';
-      }
-    }
-  } else {
-    const root = document.documentElement;
-    root.style.removeProperty('--theme-primary-bg');
-    root.style.removeProperty('--theme-accent');
-    root.style.removeProperty('--theme-secondary-bg');
-    root.style.removeProperty('--theme-action');
-    root.style.removeProperty('--theme-text');
-
-    if (playBtn) { playBtn.style.background = ''; playBtn.style.color = ''; playBtn.style.border = ''; }
-    if (pauseBtn) { pauseBtn.style.background = ''; pauseBtn.style.color = ''; pauseBtn.style.border = ''; }
-    if (themeBtn) { themeBtn.style.background = ''; themeBtn.style.color = ''; }
-    if (titleEl) titleEl.style.color = '';
-    if (artistEl) artistEl.style.color = '';
-    const heartEl = document.getElementById('heartIcon');
-    if (heartEl) heartEl.style.color = '';
+    // Set widget's own background to the new primary color
+    widget.style.backgroundColor = theme.colors.primaryBg;
   }
-}
-
-function updateVinyl(isPlaying) {
-  const vinylDisc = document.getElementById('vinyl');
-  if (!vinylDisc) return;
-  if (isPlaying) vinylDisc.classList.add('spin'); else vinylDisc.classList.remove('spin');
 }
 
 function buildThemeMenu() {
   const menu = document.getElementById('themeMenu');
   menu.innerHTML = '';
-  THEMES.forEach((t, i) => {
+  
+  THEMES.forEach((theme, i) => {
     const item = document.createElement('div');
-    item.className = 'theme-item no-drag';
-    item.textContent = t.name;
+    item.classList.add('theme-menu-item');
+    item.textContent = theme.name;
+    
     item.addEventListener('click', () => {
       currentThemeIndex = i;
       applyTheme(i);
+      // === NEW: Save to Local Storage ===
+      localStorage.setItem('lastThemeIndex', i); 
+      // === END NEW ===
       menu.classList.add('hidden');
     });
     menu.appendChild(item);
@@ -260,7 +166,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const themeMenu = document.getElementById('themeMenu');
 
   buildThemeMenu();
-  applyTheme(currentThemeIndex);
+  applyTheme(currentThemeIndex); // This now uses the index loaded from Local Storage
 
   if (playBtn) playBtn.addEventListener('click', () => { audio.play(); updateVinyl(true); });
   if (pauseBtn) pauseBtn.addEventListener('click', () => { audio.pause(); updateVinyl(false); });
@@ -268,18 +174,16 @@ document.addEventListener('DOMContentLoaded', () => {
   audio.addEventListener('play', () => updateVinyl(true));
   audio.addEventListener('pause', () => updateVinyl(false));
 
-  // === CRITICAL FIX: Use the exposed bridge API for IPC ===
-  // OLD: if (closeBtn) ipcRenderer.send('close-app'); // Error: ipcRenderer is undefined
-  // NEW: Call the exposed function from the global object.
-  
-  // NOTE: The 'close-app' handler needs to be on an event listener, not a direct call
-  // because the script runs when the DOM is ready, not when the button is clicked.
+  if (themeBtn) {
+    themeBtn.addEventListener('click', (e) => {
+      e.stopPropagation(); // Prevent document click from immediately closing it
+      themeMenu.classList.toggle('hidden');
+    });
+  }
 
-  if (themeBtn) themeBtn.addEventListener('click', (e) => { e.stopPropagation(); themeMenu.classList.toggle('hidden'); });
-
-  document.addEventListener('click', () => { themeMenu.classList.add('hidden'); });
-
+  document.addEventListener('click', (e) => {
+    if (themeMenu && !themeMenu.contains(e.target) && e.target !== themeBtn) {
+      themeMenu.classList.add('hidden');
+    }
+  });
 });
-
-
-
