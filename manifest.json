@@ -2,7 +2,7 @@
     "name": "music-widget",
     "version": "Snoopy",
     "description": "Minimal frameless music widget built with Electron",
-    "start_url": "./main_fix.js",
+    "start_url": "./index.html",
     "display": "standalone",
     "background_color": "#1D2B4D",
     "theme_color": "#E8C67B",
@@ -21,3 +21,4 @@
 
 
 }
+
