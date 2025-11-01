@@ -5,7 +5,7 @@ const THEMES = [
     id: 'GLUE',
     name: 'Snoopy x Glue (Night)',
     title: 'GLUE SONG',
-    artist: 'Clairo',
+    artist: 'Clairo & Bea',
     audioSrc: './assets/clairo_2.mp3',
     vinylImage: './assets/gluesnoopy.jpg',
     background: '',
@@ -280,5 +280,6 @@ document.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('click', () => { themeMenu.classList.add('hidden'); });
 
 });
+
 
 
