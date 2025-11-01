@@ -22,7 +22,7 @@ self.addEventListener('install', (event) => {
     event.waitUntil(
         caches.open(CACHE_NAME)
             .then(cache => {
-                // FIX: Ensure correct method for adding to cache
+                // FIX: Corrected typo from console.addAll to cache.addAll
                 return cache.addAll(urlsToCache); 
             })
     );
